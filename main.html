@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+    <script>
+        var app=angular.module("myApp",[]);
+        app.controller("myContr",function ($scope,$http) {
+            $scope.isValid=0;
+            $http.get("get/checkSession.php").then(function (response) {
+                $scope.valid=response.data;
+                if($scope.valid==0)
+                {
+                    window.location.href="index.html";
+                }
+                else {
+                    $scope.isValid=1;
+                }
+            })
+            $scope.clearSession=function () {
+                $http.get("get/clearSession.php").then(function (response) {
+                    window.location.href="index.html";
+                })
+            }
+        })
+    </script>
+</head>
+<body ng-show="isValid==1" ng-controller="myContr">
+    <h1>Welcome to My page</h1>
+<button ng-click="clearSession()" class="btn btn-danger">Sign Out</button>
+</body>
+</html>
